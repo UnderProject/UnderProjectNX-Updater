@@ -1,5 +1,5 @@
 /*
-* ReiNX Toolkit
+* StarDust
 * Copyright (C) 2018  Team ReiSwitched
 *
 * This program is free software: you can redistribute it and/or modify

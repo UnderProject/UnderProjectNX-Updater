@@ -1,14 +1,14 @@
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
-
+#DEVKITARM = /c/linx-old/devkitPro/devkitARM
+#DEVKITPRO = /c/linx-old/devkitPro
 ifeq ($(strip $(DEVKITPRO)),)
 $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
 endif
 
 TOPDIR ?= $(CURDIR)
 include $(DEVKITPRO)/libnx/switch_rules
-
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
@@ -31,19 +31,19 @@ include $(DEVKITPRO)/libnx/switch_rules
 #     - <libnx folder>/default_icon.jpg
 #---------------------------------------------------------------------------------
 
-APP_TITLE := ReiNX Toolkit
-APP_AUTHOR := Rei
-APP_VERSION := 1.3
+APP_TITLE := UnderProject Updater
+APP_AUTHOR := UnderProject Team
+APP_VERSION := 1.0
 
 ICON := Icon.jpg
-TARGET		:=	ReiNXToolkit
+TARGET		:=	UnderProject-Updater
 BUILD		:=	build
-SOURCES		:=	source source/UI source/Tools source/Net source/Utils source/Services
+SOURCES		:=	source source/UI source/Net source/Utils source/Services
 DATA		:=	data
 INCLUDES	:=	include
 EXEFS_SRC	:=	exefs_src
 ROMFS	:=	romfs
-CONFIG_JSON := ReiNXToolkit.json
+CONFIG_JSON := UnderProject-Updater.json
 
 #---------------------------------------------------------------------------------
 # options for code generation

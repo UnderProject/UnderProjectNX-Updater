@@ -1,5 +1,5 @@
 /*
-* ReiNX Toolkit
+* StarDust
 * Copyright (C) 2018  Team ReiSwitched
 *
 * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,10 @@
 
 #include <switch.h>
 #include "UI.hpp"
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
 
 
 int main() {    
@@ -25,8 +29,9 @@ int main() {
 	UI::setInstance(ui);
     ui.renderMenu();
     
-    while(appletMainLoop()) {        
+    while(appletMainLoop()) {
         hidScanInput();
+		
         u64 PressedInput = hidKeysDown(CONTROLLER_P1_AUTO);
         if((PressedInput & KEY_LSTICK_UP)||(PressedInput & KEY_DUP)) {
             ui.inSubMenu ? ui.SubMenuUp() : ui.MenuUp();
@@ -44,5 +49,6 @@ int main() {
             ui.MenuBack();
             ui.renderMenu();
         }
-    }
+        if(PressedInput & KEY_PLUS) ui.exitApp();
+        }
 }

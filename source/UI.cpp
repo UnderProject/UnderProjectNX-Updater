@@ -16,19 +16,25 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
+#include <ctime>
 #include <switch.h>
+#include <fstream>
+#include <string>
 #include "Net/Request.hpp"
-#include "Tools/autorcm.hpp"
-#include "Tools/kipmanager.hpp"
-#include "Tools/reinxconfig.hpp"
-#include "Tools/nandDump.hpp"
 #include "Utils/unzip_utils.hpp"
 #include "FS.hpp"
 #include "UI.hpp"
 #include "Power.hpp"
+#include "kernel.h"
 
+#include <stdio.h>
+#include <unistd.h>
+#include <inttypes.h>
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
+using namespace std;
+
 
 static u32 currSel = 0;
 static u32 currSubSel = 0;
@@ -43,227 +49,265 @@ static u64 HeldInput = 0;
 static u64 PressedInput = 0;
 static u64 ReleasedInput = 0;
 
+
 static string title;
 static string version;
+static string current_StarDust_version= "----";
+string origen;
+string destino;
+string new_release = "";
+string change_StarDust_net = "";
 
+string StarDust_Autoboot = "";
+string HBnew_release = "";
+string UpdateSDS = "Install StarDust";
+string rester = "";
+string vernx;
+string cfwpath = "atmosphere";
+/*
+customisation
+*/
+//unerpnx last release
+string change_upd_url = "http://cloud.not-d3fau4.tk/UPNX.php";
+//php with the url for download
+string GetPatch = "";
+
+
+u32 dev_count = 1;
+u32 render_count = 0;
+u32 rig_count = 1;
 u32 clippy = 0;
-
+u32 about = 0;
+u32 keystrick = 0;
 vector<MenuOption> mainMenu;
 vector<SDL_Surface*> images;
-
 Mix_Music *menuSel;
 Mix_Music *menuConfirm;
 Mix_Music *menuBack;
 
 UI * UI::mInstance = 0;
 
+
+
+
+
+/**
+Thanks to PricelessTwo2
+**/
+/*
+Ver ** 
+*/
+string SwitchIdent_GetFirmwareVersion(void) {
+    setsysInitialize();
+	Result ret = 0;
+    SetSysFirmwareVersion ver;
+
+    if (R_FAILED(ret = setsysGetFirmwareVersion(&ver))) {
+	
+        printf("setsysGetFirmwareVersion() failed: 0x%x.\n\n", ret);
+		
+		std:string mosca = "NO VA a joderse";
+		return mosca;
+    }
+
+    static char buf[9];
+    snprintf(buf, 19, "%u.%u.%u-%u%u", ver.major, ver.minor, ver.micro, ver.revision_major, ver.revision_minor);
+        std::string switchver = std::string(buf);
+		setsysExit();
+    return switchver;
+}
+
+
+
+/*
+* copy function
+*/
+bool copy_me(string origen, string destino) {
+    clock_t start, end;
+    start = clock();
+    ifstream source("sdmc:"+origen+"", ios::binary);
+    ofstream dest("sdmc:"+destino+"", ios::binary);
+
+    dest << source.rdbuf();
+
+    source.close();
+    dest.close();
+
+    end = clock();
+
+    cout << "CLOCKS_PER_SEC " << CLOCKS_PER_SEC << "\n";
+    cout << "CPU-TIME START " << start << "\n";
+    cout << "CPU-TIME END " << end << "\n";
+    cout << "CPU-TIME END - START " <<  end - start << "\n";
+    cout << "TIME(SEC) " << static_cast<double>(end - start) / CLOCKS_PER_SEC << "\n";
+	return 0;
+}
+
 /* ---------------------------------------------------------------------------------------
 * Menu functions
 */
-void UI::optReiUpdate() {
-    ProgBar prog;
-    prog.max = 4;
-    prog.step = 1;
-    string url = "http://45.248.48.62/ReiNX.zip";
-    CreateProgressBar(&prog, "Updating ReiNX...");
-  /*
-reinx 2.0 downloaded from guide and re-uploaded by adran. 
-*/  
-    Net net = Net();
-    hidScanInput();
-    if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_L) {
-        if(MessageBox("Warning!", "You are about to do a clean install.\nThis deletes the ReiNX folder!", TYPE_YES_NO)) {
-            FS::DeleteDirRecursive("./ReiNX");
-        }
-    }
-    bool res = net.Download(url, "/ReiNX.zip");
-    IncrementProgressBar(&prog);
-    if(!res){
-        appletBeginBlockingHomeButton(0);
-        unzFile zip = Utils::zip_open("/ReiNX.zip"); IncrementProgressBar(&prog);
-        Utils::zip_extract_all(zip, "/"); IncrementProgressBar(&prog);
-        Utils::zip_close(zip); IncrementProgressBar(&prog);
-        remove("/ReiNX.zip");
-        appletEndBlockingHomeButton();
-        MessageBox("Update", "Update has downloaded successfully!", TYPE_OK);
-    }else{
-        prog.curr = 4;
-        MessageBox("Update", "Update unsuccessful!", TYPE_OK);
-    }
+
+
+//remove template
+void UI::optremtemplate() {
+	if(MessageBox("Remove Template", "Would you like to remove \nThe Custom template?", TYPE_YES_NO)) {
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/common.szs");
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Entrance.szs");
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Set.szs");
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Flaunch.szs");
+	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Notification.szs");
+	remove("/atmosphere/titles/0100000000001000/fsmitm.flag");
+	remove("/atmosphere/titles/0100000000001013/romfs/lyt/MyPage.szs");
+	remove("/atmosphere/titles/0100000000001013/romfs/lyt/fsmitm.flag");
+
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/common.szs");
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Entrance.szs");
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Set.szs");
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Flaunch.szs");
+	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Notification.szs");
+	remove("/ReiNX/titles/0100000000001000/fsmitm.flag");
+	remove("/ReiNX/titles/0100000000001013/romfs/lyt/MyPage.szs");
+	remove("/ReiNX/titles/0100000000001013/romfs/lyt/fsmitm.flag");
+
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/common.szs");
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/Entrance.szs");
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/Set.szs");
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/Flaunch.szs");
+	remove("/SXOS/titles/0100000000001000/romfs/lyt/Notification.szs");
+	remove("/SXOS/titles/0100000000001000/fsmitm.flag");
+	remove("/SXOS/titles/0100000000001013/romfs/lyt/MyPage.szs");
+	remove("/SXOS/titles/0100000000001013/romfs/lyt/fsmitm.flag");
+	
+	}
 }
 
-void UI::optAutoRCM() {
-    bool res = MessageBox("Warning!", "THIS WRITES TO NAND.\nDo you want to continue?", TYPE_YES_NO);
-    if(res) {
-        appletBeginBlockingHomeButton(0);
-        int ret = Tools::toggle_rcm();
-        appletEndBlockingHomeButton();
-        MessageBox("AutoRCM", ret ? "AutoRCM enabled" : "AutoRCM disabled", TYPE_OK);
-    }
-    
-    //Easter egg ;^)
-    if(!res) clippy++; else clippy = 0;
-    if (clippy == 5) {
-        SDL_Surface* image = IMG_Load("romfs:/Graphics/clippy.png");
-        SDL_Texture* tex = SDL_CreateTextureFromSurface(mRender._renderer, image);
-        drawBackXY(image, tex, 50, 350);
-        SDL_RenderPresent(mRender._renderer);
-        SDL_Delay(5000);
-        SDL_DestroyTexture(tex);
-        SDL_FreeSurface(image);
-    }
+//AutoBoot
+void UI::optautobootatms() {
+	//atm
+	cfwpath = "atmosphere";
+	optGetPatch();
+}
+void UI::optautobootrei() {
+	//rei
+	cfwpath = "ReiNX";
+	optGetPatch();
+}
+void UI::optautobootsxos() {
+	//sxos
+	cfwpath = "sxos";
+	optGetPatch();
+
+	return;
+
+}
+void UI::optautobootdes() {
+	//disable
+	remove("/StarDust/payload.bin");
+	remove("/StarDust/autobootecho.txt");
+	MessageBox("Autoboot---Disable", "AutoBoot--Disable",TYPE_OK);
+	rig_count = 1;
+
+	return;
+	
 }
 
-void UI::optDumpCal0() {
-    if(Tools::CheckFreeSpace() >= CAL0_BLOCK_SIZE) {
-        appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(ProdInfo, "cal0.bin");
-        appletEndBlockingHomeButton();
-    } else {
-        MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);
-    }
-}
+//about
+void UI::optAbout() {
 
-void UI::optDumpBoots() {
-    if(Tools::CheckFreeSpace() >= BOOT_BLOCK_SIZE*2) {
-        appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(boot0, "boot0.bin");
-        Tools::DumpPartition(boot1, "boot1.bin");
-        appletEndBlockingHomeButton();
-    } else {
-        MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);
+if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_L) {
+        MessageBox("Warning!", "You are about to do a clean install.\nThis deletes the ReiNX folder!", TYPE_YES_NO);
     }
+		MessageBox(
+        "About", 
+        "Version: " + version +
+		"\nFirmware Ver :"+vernx+"\n"+
+        "Desarrollador Reisyukaku\n" +
+		"Modificado por Kronos2308\n" +
+        "Para UnderProject Team\n" +
+        "" ,    TYPE_OK);
+	//Easter egg ;^)
+		about++;
+    if (about == 10) {
+	    mainMenu.push_back(MenuOption("The truth", "Get the Truth now.",  bind(&UI::optTheTruth, this)));
+		SDL_RenderPresent(mRender._renderer);
+	}
 }
+void UI::optTheTruth() {
+appletBeginBlockingHomeButton(0);
+SDL_Surface* image1 = IMG_Load("romfs:/Graphics/Anim1.png");
+SDL_Texture* tex1 = SDL_CreateTextureFromSurface(mRender._renderer, image1);
+drawBackXY(image1, tex1, 0, 0);
+SDL_RenderPresent(mRender._renderer);
+Mix_PlayMusic(menuSel, 1);
+SDL_Delay(200);
+Mix_PlayMusic(menuConfirm, 1);
+SDL_Delay(200);
+Mix_PlayMusic(menuBack, 1);
+SDL_Delay(1000);
+SDL_DestroyTexture(tex1);
 
-void UI::optDumpNand() {
-    if(Tools::CheckFreeSpace() >= (u64)MAX_SIZE) {
-        appletBeginBlockingHomeButton(0);
-        Tools::DumpPartition(rawnand, "nand.bin");
-        appletEndBlockingHomeButton();
-    } else {
-        MessageBox("Warning!", "Not enough space on the SD card to write to!", TYPE_OK);
-    }
+
+exitApp();
 }
-
 /*
 * SubMenus
 */
-//Change splash
-void UI::optImage(u32 ind) {
-    SDL_Surface *converted_surface = SDL_ConvertSurfaceFormat(images[ind], SDL_PIXELFORMAT_ABGR8888, 0);
-    if(converted_surface->w != WIN_WIDTH || converted_surface->h != WIN_HEIGHT) {
-        MessageBox("Warning!", "Image needs to be 1280 x 720!", TYPE_OK);
-        return;
-    }
-    size_t size = 768 * 1280 * 4;
-    u8* out_pixels = (u8*)malloc(size);
-    u8* in_pixels = static_cast<u8*> (converted_surface->pixels);
-    
-    int i = 0;
-    for(int y=0; y<768; y++)
-        for(int x=1280; x>0; x--)
-            memcpy(&out_pixels[(x*768+(x==1280?0:y)) * 4], &in_pixels[(i++) * 4], 4);
 
-    FILE *fp = fopen("/ReiNX/splash.bin", "wb");
-    fwrite(out_pixels, size, 1, fp);
-    fclose(fp);
-    free(out_pixels);
-    
-    SDL_FreeSurface(converted_surface);
-    MessageBox("Conversion", "Image successfully converted!", TYPE_OK);
-}
 
-void UI::optToggleKip(string path) {
-    int ret = kip::Toggle(path);
-    if (ret != 0)
-        MessageBox("Failed to toggle KIP", "Error code " + to_string(ret), TYPE_OK);
-    UI::drawKipman();
-}
 
-void UI::drawKipman() {
-    mainMenu[2].subMenu.clear();
-    vector<string> kips;
-    kip::LoadKips(&kips);
 
-    for(unsigned int i=0;i<kips.size();i++) {
-        mainMenu[2].subMenu.push_back(MenuOption(kip::Name(kips[i]), "", bind(&UI::optToggleKip, this, kips[i])));
-    }
-}
+/*
+* HideMenu
+*/
 
-void UI::optCfwCfg(string file) {
-    int ret = cfg::Toggle(file);
-    if (ret != 0)
-        MessageBox("Failed to toggle config file", "Error code " + to_string(ret), TYPE_OK);
-    UI::drawCfwman();
-}
-
-void UI::drawCfwman() {
-    mainMenu[3].subMenu.clear();
-    vector<string> flags;
-    
-    flags.push_back("nogc");
-    flags.push_back("debug");
-
-    for(unsigned int i=0;i<flags.size();i++) {
-        mainMenu[3].subMenu.push_back(MenuOption(cfg::Name(flags[i]), "", bind(&UI::optCfwCfg, this, flags[i])));
-    }
-}
-
-//Power
-void UI::optReboot() {
-    UI::deinit();
-    Power::Reboot();
-}
-void UI::optShutdown() {
-    UI::deinit();
-    Power::Shutdown();
-}
-
-//Help
-void UI::optAbout() {
-    MessageBox(
-        "About", 
-        "Version: " + version + 
-        "\n\n" +
-        "Main developers:\n" +
-        "Rei - Concept/UI\n" +
-        "Calypso - Nand functions\n\n" +
-        "Contributers:\n" +
-        "fgsfds - Utils code\n" +
-        "Crusatyr - Testing and Nand functions\n" +
-        "neonsea - KIP Manager", 
-    TYPE_OK);
-}
-
-void UI::optUpdateHB() {
+void UI::optGetPatch() {
     ProgBar prog;
-    prog.max = 1;
+    prog.max = 4;
     prog.step = 1;
-    string url = "http://45.248.48.62/ReiNXToolkit.nro";
-
-    if (!MessageBox("Update", 
-      "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
-      TYPE_YES_NO))
-        return;
-
-    appletBeginBlockingHomeButton(0);
-    CreateProgressBar(&prog, "Updating Toolkit...");
-    
+	string filename = "/UPNX.zip";
     Net net = Net();
-    if (net.Download(url, "/switch/ReiNXToolkit_new.nro")){
-        prog.curr = 1;
+    hidScanInput();
+	string url_down;
+	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+    
+	if(GetPatch == "false") {
+	MessageBox("Patch","Patch Disable -.-", TYPE_OK);
+	return;
+	}else{
+	CreateProgressBar(&prog, "Get UnderProjectNX...");
+    bool res = net.Download(url_down,filename );
+    IncrementProgressBar(&prog);
+    if(!res){
+        appletBeginBlockingHomeButton(0);
+
+        unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
+		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
+        Utils::zip_close(zip); IncrementProgressBar(&prog);
+        remove(filename.c_str());
         appletEndBlockingHomeButton();
-        MessageBox("Update", "Update unsuccessful!", TYPE_OK);
+		remove("/switch/UPNXver.txt");
+		string secconder = "Ultima version instalada en "+cfwpath;
+		std::ofstream notes("sdmc:/switch/UPNXver.txt", std::ios::app);
+		notes << secconder;
+		notes.close();
+		rig_count = 1;
+		MessageBox("Patch","Patch Apply successfully!-.-", TYPE_OK);
+
+    }else{
+			MessageBox("Patch","error"+GetPatch+"!-.-", TYPE_OK);
+
         return;
     }
-
-    IncrementProgressBar(&prog);
-    romfsExit();
-    remove("/switch/ReiNXToolkit.nro");
-    rename("/switch/ReiNXToolkit_new.nro", "/switch/ReiNXToolkit.nro");
-    fsdevCommitDevice("sdmc");
-    exitApp();
+	
 }
+}
+
+
 
 /* ---------------------------------------------------------------------------------------
 * UI class functions
@@ -293,48 +337,26 @@ UI::UI(string Title, string Version) {
 
     title = Title;
     version = Version;
-    
     menuSel = Mix_LoadMUS("romfs:/Sounds/menu_select.mp3");
     menuConfirm = Mix_LoadMUS("romfs:/Sounds/menu_confirm.mp3");
     menuBack = Mix_LoadMUS("romfs:/Sounds/menu_back.mp3");
-    
+   
     //Main pages
-    mainMenu.push_back(MenuOption("ReiNX Updates", "Update ReiNX CFW.", nullptr));
-    mainMenu.push_back(MenuOption("Change splash", "Change ReiNX splash.bin image.", nullptr));
-    mainMenu.push_back(MenuOption("KIP Manager", "Enable or disable KIPs. Requires a reboot to take effect.", nullptr));
-    mainMenu.push_back(MenuOption("CFW Manager", "Enable or disable cfw options. Requires a reboot to take effect.", nullptr));
-    mainMenu.push_back(MenuOption("Toggle AutoRCM", "Toggles AutoRCM by writing to NAND.",  bind(&UI::optAutoRCM, this)));
-    mainMenu.push_back(MenuOption("Backup tool", "Backup various partitions from NAND.", nullptr));
-    mainMenu.push_back(MenuOption("Power", "Power options.", nullptr));
-    mainMenu.push_back(MenuOption("Help", "Information in regards to this software.", nullptr));
-    
+    mainMenu.push_back(MenuOption("Undertale-Español", "Selecciona tu CFW.", nullptr));
+    mainMenu.push_back(MenuOption("About", "About Undertale-StarDust.",  bind(&UI::optAbout, this)));
+
     //Subpages
-    mainMenu[0].subMenu.push_back(MenuOption("Update ReiNX", "", bind(&UI::optReiUpdate, this)));
-    mainMenu[0].subMenu.push_back(MenuOption("Update Toolkit", "", bind(&UI::optUpdateHB, this)));
 
-    vector<string> paths = FS::EnumDir("/Toolkit/splashes");
-    for(unsigned int i=0;i<paths.size();i++) {
-        mainMenu[1].subMenu.push_back(MenuOption(paths[i], "", bind(&UI::optImage, this, i)));
-        images.push_back(IMG_Load(("/Toolkit/splashes/"+paths[i]).c_str()));
-    }
-
-    UI::drawKipman();
-    UI::drawCfwman();
-
-    mainMenu[5].subMenu.push_back(MenuOption("Backup Cal0", "", bind(&UI::optDumpCal0, this)));
-    mainMenu[5].subMenu.push_back(MenuOption("Backup Boot0/1", "", bind(&UI::optDumpBoots, this)));
-    mainMenu[5].subMenu.push_back(MenuOption("Backup NAND", "", bind(&UI::optDumpNand, this)));
-    
-    mainMenu[6].subMenu.push_back(MenuOption("Reboot", "", bind(&UI::optReboot, this)));
-    mainMenu[6].subMenu.push_back(MenuOption("Shutdown", "", bind(&UI::optShutdown, this)));
-    
-    mainMenu[7].subMenu.push_back(MenuOption("About", "", bind(&UI::optAbout, this)));
-    
-    //Make dirs
-    if(!FS::DirExists("/Toolkit"))  FS::MakeDir("/Toolkit", 0777);
-    if(!FS::DirExists("/Toolkit/splashes"))  FS::MakeDir("/Toolkit/splashes", 0777);
+    mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
+    mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
+    mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
+//	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
+vernx = SwitchIdent_GetFirmwareVersion();
+	 Net net = Net();
+	new_release = net.Request("GET",change_upd_url);
+	new_release = net.readBuffer;
+	
 }
-
 void UI::setInstance(UI ui) {
     mInstance = &ui;
 }
@@ -477,13 +499,19 @@ bool UI::MessageBox(string header, string message, MessageType type) {
             drawText(startx+popw-butw+12, starty+poph+12, mThemes->txtcolor, "\ue0e0 Yes", mThemes->fntMedium);
             drawRect(startx+popw-(2*(butw+5))-10, starty+poph, butw, buth, mThemes->popCol1, 3, {0, 0, 0, 0xFF}); //NO
             drawText(startx+popw-(2*(butw+5))+12, starty+poph+12, mThemes->txtcolor, "\ue0e1 No", mThemes->fntMedium);
+			
             break;
         default:
         case TYPE_OK:
+			
             drawRect(startx+popw-butw-10, starty+poph, butw, buth, mThemes->popCol1, 3, {0, 0, 0, 0xFF}); //OK
             drawText(startx+popw-butw+12, starty+poph+12, mThemes->txtcolor, "\ue0e0 OK", mThemes->fntMedium);
+			
             break;
     }
+
+			
+
     SDL_RenderPresent(mRender._renderer);
     while(1){
         hidScanInput();
@@ -502,14 +530,29 @@ bool UI::MessageBox(string header, string message, MessageType type) {
     return ret;
 }
 
+
 /*
 * Render function
 */
 void UI::renderMenu() {
     SDL_RenderClear(mRender._renderer);
     drawBackXY(mThemes->bgs, mThemes->bgt, 0, 0);
-    //Mainmenu  text
-    drawText(titleX, titleY, mThemes->txtcolor, title, mThemes->fntLarge);
+	if (rig_count == 1) {
+    string autobootecho = "sdmc:/switch/UPNXver.txt";
+    std::ifstream open_echo(autobootecho.c_str());
+    if (open_echo.is_open()) {
+        std::string line;
+        getline(open_echo, StarDust_Autoboot);
+        open_echo.close();
+    }else{StarDust_Autoboot = "";}
+	rig_count++;
+	}
+	
+
+	drawText(1150, titleY, mThemes->txtcolor,"v"+version, mThemes->fntLarge);//vercion HB
+
+    drawText(500, 570, mThemes->txtcolor,StarDust_Autoboot, mThemes->fntMedium); //Autoboot
+
     int oy = menuY;
     if(!mainMenu.empty()) for(unsigned int i = 0; i < mainMenu.size(); i++){
         //Mainmenu buttons

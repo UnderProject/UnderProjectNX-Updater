@@ -1,5 +1,5 @@
 /*
-* ReiNX Toolkit
+* StarDust
 * Copyright (C) 2018  Team ReiSwitched
 *
 * This program is free software: you can redistribute it and/or modify
@@ -26,13 +26,13 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <switch.h>
+
 using namespace std;
 
 #include "UI/Render.hpp"
 #include "UI/Themes.hpp"
 #include "UI/types.hpp"
 #include "UI/MenuOption.hpp"
-#include "Tools/nandDump.hpp"
 
 class UI
 {
@@ -55,25 +55,33 @@ class UI
         void CreateProgressBar(ProgBar *prog, string header);
         void IncrementProgressBar(ProgBar *prog);
         void drawScaled(SDL_Surface *surf, SDL_Texture *tex, int x, int y, u32 w, u32 h);
-    private:
+        void exitApp();
+
+
+		private:
         //MainMenu
         void optAutoRCM();
-        void optReiUpdate();
+        void optStarDustUpdate();
+        void optAbout();		
+        void optchangelogs();	
         void optDumpCal0();
         void optDumpBoots();
         void optDumpNand();
-        void optToggleKip(string path);
-        void drawKipman();
-        void drawCfwman();
-        
         //SubMenus
-        void optImage(u32 ind);
-        void optCfwCfg(string file);
         void optShutdown();
         void optReboot();
-        void optAbout();
         void optUpdateHB();
-        
+        void optautoboot();
+        void optremtemplate();
+		void optTheTruth();
+		void optGetPatch();
+		void optautobootatms();
+		void optautobootrei();
+		void optautobootsxos();
+		void optautobootdes();
+		
+		void optDecompres();
+        void optgetkeys();
         void CreatePopupBox(u32 x, u32 y, u32 w, u32 h, string header);
         void drawText(int x, int y, SDL_Color scolor, string text, TTF_Font *font);
         void drawRect(int x, int y, int w, int h, SDL_Color scolor);
@@ -83,5 +91,4 @@ class UI
         
         void setTheme(Theme Theme);
         void deinit();
-        void exitApp();
 };

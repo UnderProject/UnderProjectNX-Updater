@@ -17,6 +17,7 @@
 */
 
 #pragma once
+#include <iostream>
 #include <string>
 #include <sys/select.h>
 #include <curl/curl.h>
@@ -27,6 +28,7 @@ using namespace std;
 class Net {
     public:
         Net();
+	std::string readBuffer;
         string Request(string method, string url);
         bool Download(string url, string filepath);
 };
