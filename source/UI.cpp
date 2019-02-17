@@ -342,8 +342,8 @@ UI::UI(string Title, string Version) {
     menuBack = Mix_LoadMUS("romfs:/Sounds/menu_back.mp3");
    
     //Main pages
-    mainMenu.push_back(MenuOption("Undertale-Español", "Selecciona tu CFW.", nullptr));
-    mainMenu.push_back(MenuOption("About", "About Undertale-StarDust.",  bind(&UI::optAbout, this)));
+    mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
+    mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
     //Subpages
 
