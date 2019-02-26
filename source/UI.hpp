@@ -72,7 +72,6 @@ class UI
         void optReboot();
         void optUpdateHB();
         void optautoboot();
-        void optremtemplate();
 		void optTheTruth();
 		void optGetPatch();
 		void optautobootatms();
