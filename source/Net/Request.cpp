@@ -36,7 +36,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
     ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
-
+//UnderProjectNX
 string Net::Request(string method, string url) {
     CURLcode res = CURLE_OK;
     CURL *curl = curl_easy_init();
@@ -68,6 +68,55 @@ bool Net::Download(string url, string filepath) {
         fp = fopen(filepath.c_str(),"wb");
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_USERPWD, "x8zrP2ojcgffRfL:");
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+        fclose(fp);
+    } else {
+        res = CURLE_HTTP_RETURNED_ERROR;
+    }
+    if (res != CURLE_OK)
+        remove(filepath.c_str());
+    return res == CURLE_OK ? false : true;
+}
+//NRO
+string Net::Request1(string method, string url) {
+    CURLcode res = CURLE_OK;
+    CURL *curl = curl_easy_init();
+    string response;
+    if(curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
+		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+		std::cout << readBuffer << std::endl;
+    }
+
+    return !res ? response : "{}";
+}
+
+bool Net::Download1(string url, string filepath) {
+    FILE *fp;
+    CURLcode res = CURLE_OK;
+    CURL *curl = curl_easy_init();
+    
+    if (curl) {   
+        fp = fopen(filepath.c_str(),"wb");
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
