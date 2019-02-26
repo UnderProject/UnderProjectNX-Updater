@@ -214,6 +214,56 @@ exitApp();
 * SubMenus
 */
 
+//HBUpdate
+void UI::optUpdateHB() {
+    ProgBar prog;
+    prog.max = 1;
+    prog.step = 1;
+    string HB_url = "http://arte-tian-cuba.000webhostapp.com/net/StarDust-toolkit-url.php";
+    string latest_releaseHB_url = "http://arte-tian-cuba.000webhostapp.com/net/StarDust-toolkit-ver.php";
+    CreateProgressBar(&prog, "Updating StarDust...");
+
+    
+    Net net = Net();
+    hidScanInput();
+	
+    string HBnew_release = "";
+    HBnew_release = net.Request("GET",latest_releaseHB_url);
+    HBnew_release = net.readBuffer;
+	net.readBuffer = "";
+	if(version != HBnew_release) {
+
+    if (!MessageBox("Update", 
+      "This will attempt to update the Toolkit.\nAfter updating, the app will exit.\n\nContinue?", 
+      TYPE_YES_NO))
+        return;
+	HB_url = net.Request("GET",HB_url);
+    HB_url = net.readBuffer;
+	net.readBuffer = "";
+    appletBeginBlockingHomeButton(0);
+    CreateProgressBar(&prog, "Updating Toolkit...");
+    
+    Net net = Net();
+    if (net.Download(HB_url, "/switch/StarDust_new.nro")){
+        prog.curr = 1;
+        appletEndBlockingHomeButton();
+        MessageBox("Update", "Update unsuccessful!", TYPE_OK);
+        return;
+    }
+
+    IncrementProgressBar(&prog);
+    romfsExit();
+    remove("/switch/StarDust.nro");
+    rename("/switch/StarDust_new.nro", "/switch/StarDust.nro");
+    fsdevCommitDevice("sdmc");
+    exitApp();
+	}else{
+	MessageBox(
+        "Stardust Toolkit is up to date",
+        "The last release is"" "+HBnew_release+" ""you have"" "+version+"",
+    TYPE_OK);
+	}
+}
 
 
 
@@ -301,6 +351,7 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
+    mainMenu.push_back(MenuOption("tools", "tools.", nullptr));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
     //Subpages
@@ -308,6 +359,8 @@ UI::UI(string Title, string Version) {
     mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
     mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
     mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
+   mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+	
 //	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
 vernx = SwitchIdent_GetFirmwareVersion();
 	 Net net = Net();
