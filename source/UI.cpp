@@ -49,6 +49,8 @@ static u64 HeldInput = 0;
 static u64 PressedInput = 0;
 static u64 ReleasedInput = 0;
 
+string url_down;
+url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
 
 static string title;
 static string version;
@@ -219,16 +221,15 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string HB_url = "http://arte-tian-cuba.000webhostapp.com/net/StarDust-toolkit-url.php";
-    string latest_releaseHB_url = "http://arte-tian-cuba.000webhostapp.com/net/StarDust-toolkit-ver.php";
-    CreateProgressBar(&prog, "Updating StarDust...");
+    
+    CreateProgressBar(&prog, "Updating UnderProject-Updater...");
 
     
     Net net = Net();
     hidScanInput();
 	
     string HBnew_release = "";
-    HBnew_release = net.Request("GET",latest_releaseHB_url);
+    HBnew_release = net.Request1("GET",url_down);
     HBnew_release = net.readBuffer;
 	net.readBuffer = "";
 	if(version != HBnew_release) {
@@ -237,14 +238,14 @@ void UI::optUpdateHB() {
       "This will attempt to update the Toolkit.\nAfter updating, the app will exit.\n\nContinue?", 
       TYPE_YES_NO))
         return;
-	HB_url = net.Request("GET",HB_url);
+	HB_url = net.Request1("GET",url_down);
     HB_url = net.readBuffer;
 	net.readBuffer = "";
     appletBeginBlockingHomeButton(0);
     CreateProgressBar(&prog, "Updating Toolkit...");
     
     Net net = Net();
-    if (net.Download(HB_url, "/switch/StarDust_new.nro")){
+    if (net.Download1(HB_url, "/switch/UnderProject-Updater_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
@@ -253,14 +254,14 @@ void UI::optUpdateHB() {
 
     IncrementProgressBar(&prog);
     romfsExit();
-    remove("/switch/StarDust.nro");
-    rename("/switch/StarDust_new.nro", "/switch/StarDust.nro");
+    remove("/switch/UnderProject-Updater.nro");
+    rename("/switch/UnderProject-Updater_new.nro", "/switch/UnderProject-Updater.nro");
     fsdevCommitDevice("sdmc");
     exitApp();
 	}else{
 	MessageBox(
-        "Stardust Toolkit is up to date",
-        "The last release is"" "+HBnew_release+" ""you have"" "+version+"",
+        "UnderProject-Updater is up to date",
+
     TYPE_OK);
 	}
 }
@@ -278,8 +279,7 @@ void UI::optGetPatch() {
 	string filename = "/UPNX.zip";
     Net net = Net();
     hidScanInput();
-	string url_down;
-	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+
     
 	if(GetPatch == "false") {
 	MessageBox("Patch","Patch Disable -.-", TYPE_OK);
@@ -351,6 +351,7 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
+	//mainMenu.push_back(MenuOption("DeltaProjectNX", "Selecciona tu CFW.", nullptr));
     mainMenu.push_back(MenuOption("tools", "tools.", nullptr));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
@@ -359,7 +360,7 @@ UI::UI(string Title, string Version) {
     mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
     mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
     mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
-   mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+    mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
 	
 //	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
 vernx = SwitchIdent_GetFirmwareVersion();
