@@ -49,8 +49,7 @@ static u64 HeldInput = 0;
 static u64 PressedInput = 0;
 static u64 ReleasedInput = 0;
 
-string url_down;
-url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+
 
 static string title;
 static string version;
@@ -221,7 +220,8 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    
+    string url_down;
+url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     CreateProgressBar(&prog, "Updating UnderProject-Updater...");
 
     
@@ -279,7 +279,8 @@ void UI::optGetPatch() {
 	string filename = "/UPNX.zip";
     Net net = Net();
     hidScanInput();
-
+	string url_down;
+	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     
 	if(GetPatch == "false") {
 	MessageBox("Patch","Patch Disable -.-", TYPE_OK);
