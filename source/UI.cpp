@@ -239,16 +239,14 @@ void UI::optUpdateHB() {
     prog.step = 1;
     string url = "http://builds.reinx.guide/toolkit/ReiNX_Toolkit-latest.nro";
 
-    if (!MessageBox("Update", 
-      "This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?", 
-      TYPE_YES_NO))
+    if (!MessageBox("Update","This will attempt to update the Toolbox.\nAfter updating, the app will exit.\n\nContinue?",TYPE_YES_NO))
         return;
 
     appletBeginBlockingHomeButton(0);
     CreateProgressBar(&prog, "Updating Toolkit...");
     
     Net net = Net();
-    if (net.Download(url, "/switch/ReiNXToolkit_new.nro")){
+    if (net.Download1(url, "/switch/ReiNXToolkit_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
