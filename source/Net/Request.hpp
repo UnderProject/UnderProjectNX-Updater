@@ -30,5 +30,7 @@ class Net {
         Net();
 	std::string readBuffer;
         string Request(string method, string url);
-        bool Download(string url, string filepath);
+        bool Download(string url, string filepath);        
+	string Request1(string method, string url);
+        bool Download1(string url, string filepath);
 };
