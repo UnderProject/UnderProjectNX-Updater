@@ -146,45 +146,7 @@ bool copy_me(string origen, string destino) {
 /* ---------------------------------------------------------------------------------------
 * Menu functions
 */
-
-
-//remove template
-void UI::optremtemplate() {
-	if(MessageBox("Remove Template", "Would you like to remove \nThe Custom template?", TYPE_YES_NO)) {
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/common.szs");
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Entrance.szs");
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Set.szs");
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Flaunch.szs");
-	remove("/atmosphere/titles/0100000000001000/romfs/lyt/Notification.szs");
-	remove("/atmosphere/titles/0100000000001000/fsmitm.flag");
-	remove("/atmosphere/titles/0100000000001013/romfs/lyt/MyPage.szs");
-	remove("/atmosphere/titles/0100000000001013/romfs/lyt/fsmitm.flag");
-
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/common.szs");
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Entrance.szs");
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Set.szs");
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Flaunch.szs");
-	remove("/ReiNX/titles/0100000000001000/romfs/lyt/Notification.szs");
-	remove("/ReiNX/titles/0100000000001000/fsmitm.flag");
-	remove("/ReiNX/titles/0100000000001013/romfs/lyt/MyPage.szs");
-	remove("/ReiNX/titles/0100000000001013/romfs/lyt/fsmitm.flag");
-
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/common.szs");
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/Entrance.szs");
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/ResidentMenu.szs");
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/Set.szs");
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/Flaunch.szs");
-	remove("/SXOS/titles/0100000000001000/romfs/lyt/Notification.szs");
-	remove("/SXOS/titles/0100000000001000/fsmitm.flag");
-	remove("/SXOS/titles/0100000000001013/romfs/lyt/MyPage.szs");
-	remove("/SXOS/titles/0100000000001013/romfs/lyt/fsmitm.flag");
-	
-	}
-}
-
-//AutoBoot
+//cfw select
 void UI::optautobootatms() {
 	//atm
 	cfwpath = "atmosphere";
@@ -216,10 +178,6 @@ void UI::optautobootdes() {
 
 //about
 void UI::optAbout() {
-
-if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_L) {
-        MessageBox("Warning!", "You are about to do a clean install.\nThis deletes the ReiNX folder!", TYPE_YES_NO);
-    }
 		MessageBox(
         "About", 
         "Version: " + version +
