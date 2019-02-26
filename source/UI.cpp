@@ -238,14 +238,8 @@ url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
       "This will attempt to update the Toolkit.\nAfter updating, the app will exit.\n\nContinue?", 
       TYPE_YES_NO))
         return;
-	HB_url = net.Request1("GET",url_down);
-    HB_url = net.readBuffer;
-	net.readBuffer = "";
-    appletBeginBlockingHomeButton(0);
-    CreateProgressBar(&prog, "Updating Toolkit...");
-    
     Net net = Net();
-    if (net.Download1(HB_url, "/switch/UnderProject-Updater_new.nro")){
+    if (net.Download1(url_down, "/switch/UnderProject-Updater_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
