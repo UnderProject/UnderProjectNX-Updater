@@ -199,8 +199,6 @@ void UI::optUpdateHB() {
 
 	url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     CreateProgressBar(&prog, "Updating UnderProject-Updater...");
-
-    Net net = Net();
     hidScanInput();
 
     if (!MessageBox("Update", 
