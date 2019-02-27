@@ -53,16 +53,12 @@ static u64 ReleasedInput = 0;
 
 static string title;
 static string version;
-static string current_StarDust_version= "----";
 string origen;
 string destino;
 string new_release = "";
-string change_StarDust_net = "";
 
 string StarDust_Autoboot = "";
 string HBnew_release = "";
-string UpdateSDS = "Install StarDust";
-string rester = "";
 string vernx;
 string cfwpath = "atmosphere";
 /*
@@ -95,30 +91,23 @@ UI * UI::mInstance = 0;
 /**
 Thanks to PricelessTwo2
 **/
-/*
-Ver ** 
-*/
+//Ver *.*.*-** 
+
 string SwitchIdent_GetFirmwareVersion(void) {
     setsysInitialize();
 	Result ret = 0;
     SetSysFirmwareVersion ver;
-
     if (R_FAILED(ret = setsysGetFirmwareVersion(&ver))) {
-	
         printf("setsysGetFirmwareVersion() failed: 0x%x.\n\n", ret);
-		
 		std:string mosca = "NO VA a joderse";
 		return mosca;
     }
-
     static char buf[9];
     snprintf(buf, 19, "%u.%u.%u-%u%u", ver.major, ver.minor, ver.micro, ver.revision_major, ver.revision_minor);
         std::string switchver = std::string(buf);
 		setsysExit();
     return switchver;
 }
-
-
 
 /*
 * copy function
@@ -162,60 +151,45 @@ void UI::optautobootsxos() {
 	//sxos
 	cfwpath = "sxos";
 	optGetPatch();
-
-	return;
-
-}
-void UI::optautobootdes() {
-	//disable
-	remove("/StarDust/payload.bin");
-	remove("/StarDust/autobootecho.txt");
-	MessageBox("Autoboot---Disable", "AutoBoot--Disable",TYPE_OK);
-	rig_count = 1;
-
-	return;
-	
 }
 
-//about
-void UI::optAbout() {
-		MessageBox(
-        "About", 
-        "Version: " + version +
-		"\nFirmware Ver :"+vernx+"\n"+
-        "Desarrollador Reisyukaku\n" +
-		"Modificado por Kronos2308\n" +
-        "Para UnderProject Team\n" +
-        "" ,    TYPE_OK);
-	//Easter egg ;^)
-		about++;
-    if (about == 10) {
-	    mainMenu.push_back(MenuOption("The truth", "Get the Truth now.",  bind(&UI::optTheTruth, this)));
-		SDL_RenderPresent(mRender._renderer);
-	}
+//UnderProjectNX Selecciona tu CFW
+void UI::optGetPatch() {
+    ProgBar prog;
+    prog.max = 4;
+    prog.step = 1;
+	string filename = "/UPNX.zip";
+    Net net = Net();
+    hidScanInput();
+	string url_down;
+	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+    
+	CreateProgressBar(&prog, "Get UnderProjectNX...");
+    bool res = net.Download(url_down,filename );
+    IncrementProgressBar(&prog);
+    if(!res){
+        appletBeginBlockingHomeButton(0);
+        unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
+		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
+        Utils::zip_close(zip); IncrementProgressBar(&prog);
+        remove(filename.c_str());
+        appletEndBlockingHomeButton();
+		remove("/switch/UPNXver.txt");
+		string secconder = "Ultima version instalada en "+cfwpath;
+		std::ofstream notes("sdmc:/switch/UPNXver.txt", std::ios::app);
+		notes << secconder;
+		notes.close();
+		rig_count = 1;
+		MessageBox("Patch","Patch Apply successfully!-.-", TYPE_OK);
+    }else{
+		MessageBox("Patch","error"+GetPatch+"!-.-", TYPE_OK);
+        return;
+    }
 }
-void UI::optTheTruth() {
-appletBeginBlockingHomeButton(0);
-SDL_Surface* image1 = IMG_Load("romfs:/Graphics/Anim1.png");
-SDL_Texture* tex1 = SDL_CreateTextureFromSurface(mRender._renderer, image1);
-drawBackXY(image1, tex1, 0, 0);
-SDL_RenderPresent(mRender._renderer);
-Mix_PlayMusic(menuSel, 1);
-SDL_Delay(200);
-Mix_PlayMusic(menuConfirm, 1);
-SDL_Delay(200);
-Mix_PlayMusic(menuBack, 1);
-SDL_Delay(1000);
-SDL_DestroyTexture(tex1);
 
-
-exitApp();
-}
-/*
-* SubMenus
-*/
-
-//HBUpdate
+//Update ME
 void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
@@ -223,10 +197,9 @@ void UI::optUpdateHB() {
     string url = "";
 	
 
-url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+	url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     CreateProgressBar(&prog, "Updating UnderProject-Updater...");
 
-    
     Net net = Net();
     hidScanInput();
 
@@ -251,57 +224,40 @@ url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
 	}
 }
 
-
-
-/*
-* HideMenu
-*/
-
-void UI::optGetPatch() {
-    ProgBar prog;
-    prog.max = 4;
-    prog.step = 1;
-	string filename = "/UPNX.zip";
-    Net net = Net();
-    hidScanInput();
-	string url_down;
-	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
-    
-	if(GetPatch == "false") {
-	MessageBox("Patch","Patch Disable -.-", TYPE_OK);
-	return;
-	}else{
-	CreateProgressBar(&prog, "Get UnderProjectNX...");
-    bool res = net.Download(url_down,filename );
-    IncrementProgressBar(&prog);
-    if(!res){
-        appletBeginBlockingHomeButton(0);
-
-        unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
-		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
-        Utils::zip_close(zip); IncrementProgressBar(&prog);
-        remove(filename.c_str());
-        appletEndBlockingHomeButton();
-		remove("/switch/UPNXver.txt");
-		string secconder = "Ultima version instalada en "+cfwpath;
-		std::ofstream notes("sdmc:/switch/UPNXver.txt", std::ios::app);
-		notes << secconder;
-		notes.close();
-		rig_count = 1;
-		MessageBox("Patch","Patch Apply successfully!-.-", TYPE_OK);
-
-    }else{
-			MessageBox("Patch","error"+GetPatch+"!-.-", TYPE_OK);
-
-        return;
-    }
-	
+//about
+void UI::optAbout() {
+		MessageBox(
+        "About", 
+        "Version: " + version +
+		"\nFirmware Ver :"+vernx+"\n"+
+        "Desarrollador Reisyukaku\n" +
+		"Modificado por Kronos2308\n" +
+        "Para UnderProject Team\n" +
+        "" ,    TYPE_OK);
+	//Easter egg ;^)
+		about++;
+    if (about == 3) {
+	    mainMenu.push_back(MenuOption("The truth", "Get the Truth now.",  bind(&UI::optTheTruth, this)));
+		SDL_RenderPresent(mRender._renderer);
+	}
 }
+void UI::optTheTruth() {
+appletBeginBlockingHomeButton(0);
+SDL_Surface* image1 = IMG_Load("romfs:/Graphics/ForReiNXLight.png");
+SDL_Texture* tex1 = SDL_CreateTextureFromSurface(mRender._renderer, image1);
+drawBackXY(image1, tex1, 0, 0);
+SDL_RenderPresent(mRender._renderer);
+Mix_PlayMusic(menuSel, 1);
+SDL_Delay(200);
+Mix_PlayMusic(menuConfirm, 1);
+SDL_Delay(200);
+Mix_PlayMusic(menuBack, 1);
+SDL_Delay(1000);
+SDL_DestroyTexture(tex1);
+
+
+exitApp();
 }
-
-
 
 /* ---------------------------------------------------------------------------------------
 * UI class functions

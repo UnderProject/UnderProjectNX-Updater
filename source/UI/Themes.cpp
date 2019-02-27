@@ -25,14 +25,14 @@ Themes * Themes::mInstance = 0;
 Theme Themes::HorizonLight() {
 	Theme th;
 	th.FontPath = "romfs:/Fonts/NintendoStandard.ttf";
-	th.BackgroundPath= "romfs:/Graphics/ForReiNXLight.png";
-	th.TextColor  = BLACK;
-	th.SelectedTextColor = BLUE;
-    th.ButtonColor = WHITE;
-    th.ButtonBorderColor = TEAL;
+	th.BackgroundPath= "romfs:/Graphics/ForReiNXDark.png";
+	th.TextColor  = WHITE;
+	th.SelectedTextColor = TEAL;
+    th.ButtonColor = GREY;
+    th.ButtonBorderColor = LIGHTBLUE;
     th.BGColor = GREY;
-    th.PopCol1 = 0xD0D0D0FF;
-    th.PopCol2 = 0xF0F0F0FF;
+    th.PopCol1 = 0x202020FF;
+    th.PopCol2 = 0x303030FF;
     return th;
 }
 
