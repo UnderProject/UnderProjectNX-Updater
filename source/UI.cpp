@@ -206,7 +206,7 @@ void UI::optUpdateHB() {
       TYPE_YES_NO))
         return;
     Net net = Net();
-    if (net.Download1(url_down, "/switch/UnderProject-Updater_new.nro")){
+    if (net.Download1(url, "/switch/UnderProject-Updater_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
