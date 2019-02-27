@@ -15,7 +15,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-//estoy en la correcta
+
 #include <iostream>
 #include <ctime>
 #include <switch.h>
@@ -220,19 +220,15 @@ void UI::optUpdateHB() {
     ProgBar prog;
     prog.max = 1;
     prog.step = 1;
-    string url_down;
-url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+    string url = "";
+	
+
+url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     CreateProgressBar(&prog, "Updating UnderProject-Updater...");
 
     
     Net net = Net();
     hidScanInput();
-	
-    string HBnew_release = "";
-    HBnew_release = net.Request1("GET",url_down);
-    HBnew_release = net.readBuffer;
-	net.readBuffer = "";
-	if(version != HBnew_release) {
 
     if (!MessageBox("Update", 
       "This will attempt to update the Toolkit.\nAfter updating, the app will exit.\n\nContinue?", 
@@ -245,18 +241,13 @@ url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
         return;
     }
-
     IncrementProgressBar(&prog);
     romfsExit();
     remove("/switch/UnderProject-Updater.nro");
     rename("/switch/UnderProject-Updater_new.nro", "/switch/UnderProject-Updater.nro");
     fsdevCommitDevice("sdmc");
     exitApp();
-	}else{
-	MessageBox(
-        "UnderProject-Updater is up to date",
 
-    TYPE_OK);
 	}
 }
 
