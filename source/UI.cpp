@@ -350,17 +350,17 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
-	mainMenu.push_back(MenuOption("DeltaProjectNX", "Coming Soon.", nullptr));
+	mainMenu.push_back(MenuOption("DeltaProjectNX (Alpha)", "Selecciona tu CFW.", nullptr));
     mainMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
     //Subpages
-	//normal patch
+	//UnderProjectNX
     mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optpatchams, this)));
     mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optpatchrei, this)));
     mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optpatchsxos, this)));
 	
-	//delta run
+	//DeltaProjectNX
     mainMenu[1].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optdeltarunams, this)));
     mainMenu[1].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optdeltarunrei, this)));
     mainMenu[1].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optdeltarunsxos, this)));
