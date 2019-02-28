@@ -291,7 +291,7 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
-	//mainMenu.push_back(MenuOption("DeltaProjectNX", "Selecciona tu CFW.", nullptr));
+	mainMenu.push_back(MenuOption("DeltaProjectNX", "Selecciona tu CFW.", nullptr));
     mainMenu.push_back(MenuOption("tools", "tools.", nullptr));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
@@ -300,7 +300,10 @@ UI::UI(string Title, string Version) {
     mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
     mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
     mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
-    mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+    mainMenu[3].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+	mainMenu[2].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
+    mainMenu[2].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
+    mainMenu[2].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
 	
 //	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
 vernx = SwitchIdent_GetFirmwareVersion();
