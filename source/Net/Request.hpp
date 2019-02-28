@@ -33,4 +33,6 @@ class Net {
         bool Download(string url, string filepath);        
 	string Request1(string method, string url);
         bool Download1(string url, string filepath);
+	string Request2(string method, string url);
+        bool Download2(string url, string filepath);
 };
