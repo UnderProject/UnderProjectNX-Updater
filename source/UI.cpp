@@ -26,7 +26,6 @@
 #include "FS.hpp"
 #include "UI.hpp"
 #include "Power.hpp"
-#include "kernel.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -291,7 +290,7 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
-	mainMenu.push_back(MenuOption("DeltaProjectNX", "Coming Soon.", nullptr));
+//	mainMenu.push_back(MenuOption("DeltaProjectNX", "Coming Soon.", nullptr));
     mainMenu.push_back(MenuOption("tools", "tools.", nullptr));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
@@ -300,7 +299,7 @@ UI::UI(string Title, string Version) {
     mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
     mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
     mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
-    mainMenu[2].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+    mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
 	
 	//	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
 	vernx = SwitchIdent_GetFirmwareVersion();
@@ -502,7 +501,6 @@ void UI::renderMenu() {
 	
 
 	drawText(1150, titleY, mThemes->txtcolor,"v"+version, mThemes->fntLarge);//vercion HB
-
     drawText(500, 570, mThemes->txtcolor,StarDust_Autoboot, mThemes->fntMedium); //Autoboot
 
     int oy = menuY;
@@ -526,7 +524,7 @@ void UI::renderMenu() {
                 }else{
                     drawText(subX + 30, subY + 30 + ((j+1)*50), mThemes->txtcolor, mainMenu[i].subMenu[j].getName(), mThemes->fntMedium);
                 }
-                if(j == currSubSel && currSel == 1) {
+                if(j == currSubSel && currSel == 3) {
                     SDL_Texture* tex = SDL_CreateTextureFromSurface(mRender._renderer, images[currSubSel]);
                     drawScaled(images[currSubSel], tex, 710, 120, images[currSubSel]->w/3, images[currSubSel]->h/3);
                 }
