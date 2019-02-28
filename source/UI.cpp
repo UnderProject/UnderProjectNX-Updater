@@ -194,17 +194,17 @@ void UI::optGetPatch() {
 void UI::optdeltarunams() {
 	//atm
 	cfwpath = "atmosphere";
-	optGetPatch();
+	optdeltarun();
 }
 void UI::optdeltarunrei() {
 	//rei
 	cfwpath = "ReiNX";
-	optGetPatch();
+	optdeltarun();
 }
 void UI::optdeltarunsxos() {
 	//sxos
 	cfwpath = "sxos";
-	optGetPatch();
+	optdeltarun();
 }
 
 //DeltaRun patch
