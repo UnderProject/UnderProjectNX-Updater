@@ -219,7 +219,7 @@ void UI::optUpdateHB() {
     fsdevCommitDevice("sdmc");
     exitApp();
 
-	}
+	
 }
 
 //about
