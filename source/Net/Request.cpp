@@ -110,7 +110,7 @@ string Net::Request1(string method, string url) {
     return !res ? response : "{}";
 }
 */
-bool Net::Download1(string url, string filepath) {
+bool Net::Downloader1(string url, string filepath) {
     FILE *fp;
     CURLcode res = CURLE_OK;
     CURL *curl = curl_easy_init();
@@ -161,7 +161,7 @@ string Net::Request2(string method, string url) {
 }
 */
 
-bool Net::Download2(string url, string filepath) {
+bool Net::Downloader2(string url, string filepath) {
     FILE *fp;
     CURLcode res = CURLE_OK;
     CURL *curl = curl_easy_init();

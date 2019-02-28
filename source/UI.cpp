@@ -219,9 +219,9 @@ void UI::optdeltarun() {
 	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     
 	CreateProgressBar(&prog, "Get UnderProjectNX...");
-    bool res = net.Download1(url_down,filename );
+    bool rester = net.Downloader1(url_down,filename );
     IncrementProgressBar(&prog);
-    if(!res){
+    if(!rester){
         appletBeginBlockingHomeButton(0);
         unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
 		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
@@ -254,7 +254,6 @@ void UI::optUpdateHB() {
     prog.max = 1;
     prog.step = 1;
     string url = "";
-	
 
 	url = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     CreateProgressBar(&prog, "Updating UnderProject-Updater...");
@@ -265,7 +264,7 @@ void UI::optUpdateHB() {
       TYPE_YES_NO))
         return;
     Net net = Net();
-    if (net.Download2(url, "/switch/UnderProject-Updater_new.nro")){
+    if (net.Downloader2(url, "/switch/UnderProject-Updater_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);

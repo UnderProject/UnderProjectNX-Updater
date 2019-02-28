@@ -29,10 +29,12 @@ class Net {
     public:
         Net();
 	std::string readBuffer;
-        string Request(string method, string url);
-        bool Download(string url, string filepath);        
+    string Request(string method, string url);
+    bool Download(string url, string filepath);
+	
 	string Request1(string method, string url);
-        bool Download1(string url, string filepath);
+    bool Downloader1(string url, string filepath);
+	 
 	string Request2(string method, string url);
-        bool Download2(string url, string filepath);
+    bool Downloader2(string url, string filepath);
 };
