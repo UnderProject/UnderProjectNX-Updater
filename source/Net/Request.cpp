@@ -85,14 +85,15 @@ bool Net::Download(string url, string filepath) {
         remove(filepath.c_str());
     return res == CURLE_OK ? false : true;
 }
-//NRO
+
+//DeltaProjectNX
 string Net::Request1(string method, string url) {
     CURLcode res = CURLE_OK;
     CURL *curl = curl_easy_init();
     string response;
     if(curl) {
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "F4CPpG24KmPbaLj:");
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
@@ -116,7 +117,7 @@ bool Net::Download1(string url, string filepath) {
     if (curl) {   
         fp = fopen(filepath.c_str(),"wb");
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "F4CPpG24KmPbaLj:");
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
@@ -134,14 +135,14 @@ bool Net::Download1(string url, string filepath) {
         remove(filepath.c_str());
     return res == CURLE_OK ? false : true;
 }
-//DeltaProjectNX
+//NRO
 string Net::Request2(string method, string url) {
     CURLcode res = CURLE_OK;
     CURL *curl = curl_easy_init();
     string response;
     if(curl) {
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERPWD, "F4CPpG24KmPbaLj:");
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
@@ -165,7 +166,7 @@ bool Net::Download2(string url, string filepath) {
     if (curl) {   
         fp = fopen(filepath.c_str(),"wb");
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-		curl_easy_setopt(curl, CURLOPT_USERPWD, "F4CPpG24KmPbaLj:");
+		curl_easy_setopt(curl, CURLOPT_USERPWD, "BscS3mSGjbkMnXn:");
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_RESOLVE, hosts);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);

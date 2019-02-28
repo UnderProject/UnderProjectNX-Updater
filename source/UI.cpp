@@ -219,7 +219,7 @@ void UI::optdeltarun() {
 	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
     
 	CreateProgressBar(&prog, "Get UnderProjectNX...");
-    bool res = net.Download2(url_down,filename );
+    bool res = net.Download1(url_down,filename );
     IncrementProgressBar(&prog);
     if(!res){
         appletBeginBlockingHomeButton(0);
@@ -265,7 +265,7 @@ void UI::optUpdateHB() {
       TYPE_YES_NO))
         return;
     Net net = Net();
-    if (net.Download1(url, "/switch/UnderProject-Updater_new.nro")){
+    if (net.Download2(url, "/switch/UnderProject-Updater_new.nro")){
         prog.curr = 1;
         appletEndBlockingHomeButton();
         MessageBox("Update", "Update unsuccessful!", TYPE_OK);
