@@ -529,7 +529,7 @@ void UI::renderMenu() {
                 }else{
                     drawText(subX + 30, subY + 30 + ((j+1)*50), mThemes->txtcolor, mainMenu[i].subMenu[j].getName(), mThemes->fntMedium);
                 }
-                if(j == currSubSel && currSel == 1) {
+                if(j == currSubSel && currSel == 3) {
                     SDL_Texture* tex = SDL_CreateTextureFromSurface(mRender._renderer, images[currSubSel]);
                     drawScaled(images[currSubSel], tex, 710, 120, images[currSubSel]->w/3, images[currSubSel]->h/3);
                 }
