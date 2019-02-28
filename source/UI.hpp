@@ -71,13 +71,18 @@ class UI
         void optShutdown();
         void optReboot();
         void optUpdateHB();
-        void optautoboot();
 		void optTheTruth();
+		
 		void optGetPatch();
-		void optautobootatms();
-		void optautobootrei();
-		void optautobootsxos();
-		void optautobootdes();
+		void optpatchams();
+		void optpatchrei();
+		void optpatchsxos();
+		
+		void optdeltarun();
+		void optdeltarunams();
+		void optdeltarunrei();
+		void optdeltarunsxos();
+
 		
 		void optDecompres();
         void optgetkeys();

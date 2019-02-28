@@ -133,26 +133,26 @@ bool copy_me(string origen, string destino) {
 }
 
 /* ---------------------------------------------------------------------------------------
-* Menu functions
+* get patch
 */
-//cfw select
-void UI::optautobootatms() {
+//cfw select for normal patch
+void UI::optpatchams() {
 	//atm
 	cfwpath = "atmosphere";
 	optGetPatch();
 }
-void UI::optautobootrei() {
+void UI::optpatchrei() {
 	//rei
 	cfwpath = "ReiNX";
 	optGetPatch();
 }
-void UI::optautobootsxos() {
+void UI::optpatchsxos() {
 	//sxos
 	cfwpath = "sxos";
 	optGetPatch();
 }
 
-//UnderProjectNX Selecciona tu CFW
+//normal patch
 void UI::optGetPatch() {
     ProgBar prog;
     prog.max = 4;
@@ -187,6 +187,66 @@ void UI::optGetPatch() {
         return;
     }
 }
+/* ---------------------------------------------------------------------------------------
+* delta Run
+*/
+//cfw select for delta run patch
+void UI::optdeltarunams() {
+	//atm
+	cfwpath = "atmosphere";
+	optGetPatch();
+}
+void UI::optdeltarunrei() {
+	//rei
+	cfwpath = "ReiNX";
+	optGetPatch();
+}
+void UI::optdeltarunsxos() {
+	//sxos
+	cfwpath = "sxos";
+	optGetPatch();
+}
+
+//DeltaRun patch
+void UI::optdeltarun() {
+    ProgBar prog;
+    prog.max = 4;
+    prog.step = 1;
+	string filename = "/UPNXdelta.zip";
+    Net net = Net();
+    hidScanInput();
+	string url_down;
+	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+    
+	CreateProgressBar(&prog, "Get UnderProjectNX...");
+    bool res = net.Download2(url_down,filename );
+    IncrementProgressBar(&prog);
+    if(!res){
+        appletBeginBlockingHomeButton(0);
+        unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
+		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
+        Utils::zip_close(zip); IncrementProgressBar(&prog);
+        remove(filename.c_str());
+        appletEndBlockingHomeButton();
+		remove("/switch/UPNXver.txt");
+		string secconder = "Ultima version instalada en "+cfwpath;
+		std::ofstream notes("sdmc:/switch/UPNXver.txt", std::ios::app);
+		notes << secconder;
+		notes.close();
+		rig_count = 1;
+		MessageBox("Patch","Patch Apply successfully!-.-", TYPE_OK);
+    }else{
+		MessageBox("Patch","error"+GetPatch+"!-.-", TYPE_OK);
+        return;
+    }
+}
+
+
+
+
+
 
 //Update ME
 void UI::optUpdateHB() {
@@ -290,16 +350,23 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
-//	mainMenu.push_back(MenuOption("DeltaProjectNX", "Coming Soon.", nullptr));
-    mainMenu.push_back(MenuOption("tools", "tools.", nullptr));
+	mainMenu.push_back(MenuOption("DeltaProjectNX", "Coming Soon.", nullptr));
+    mainMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
     //Subpages
-
-    mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optautobootatms, this)));
-    mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optautobootrei, this)));
-    mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optautobootsxos, this)));
-    mainMenu[1].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
+	//normal patch
+    mainMenu[0].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optpatchams, this)));
+    mainMenu[0].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optpatchrei, this)));
+    mainMenu[0].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optpatchsxos, this)));
+	
+	//delta run
+    mainMenu[1].subMenu.push_back(MenuOption("Atmosphere", "", bind(&UI::optdeltarunams, this)));
+    mainMenu[1].subMenu.push_back(MenuOption("ReiNX", "", bind(&UI::optdeltarunrei, this)));
+    mainMenu[1].subMenu.push_back(MenuOption("SXOS", "", bind(&UI::optdeltarunsxos, this)));
+	
+	
+//    mainMenu[2].subMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
 	
 	//	mainMenu[0].subMenu.push_back(MenuOption("Borrar-parche, "", bind(&UI::optautobootdes, this)));
 	vernx = SwitchIdent_GetFirmwareVersion();
@@ -524,7 +591,7 @@ void UI::renderMenu() {
                 }else{
                     drawText(subX + 30, subY + 30 + ((j+1)*50), mThemes->txtcolor, mainMenu[i].subMenu[j].getName(), mThemes->fntMedium);
                 }
-                if(j == currSubSel && currSel == 3) {
+                if(j == currSubSel && currSel == 4) {
                     SDL_Texture* tex = SDL_CreateTextureFromSurface(mRender._renderer, images[currSubSel]);
                     drawScaled(images[currSubSel], tex, 710, 120, images[currSubSel]->w/3, images[currSubSel]->h/3);
                 }
