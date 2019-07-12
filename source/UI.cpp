@@ -161,7 +161,7 @@ void UI::optGetPatch() {
     Net net = Net();
     hidScanInput();
 	string url_down;
-	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+	url_down = "https://archive.org/download/mibuild_201907/UPNX.zip";
     
 	CreateProgressBar(&prog, "Get UnderProjectNX...");
     bool res = net.Download(url_down,filename );
@@ -216,7 +216,7 @@ void UI::optdeltarun() {
     Net net = Net();
     hidScanInput();
 	string url_down;
-	url_down = "http://cloud.not-d3fau4.tk/nextcloud/public.php/webdav";
+	url_down = "https://archive.org/download/mibuild_201907/DPNXALPHA.zip";
     
 	CreateProgressBar(&prog, "Get UnderProjectNX...");
     bool rester = net.Downloader1(url_down,filename );
