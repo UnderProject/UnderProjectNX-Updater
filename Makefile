@@ -1,10 +1,16 @@
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
-#DEVKITARM = /c/linx-old/devkitPro/devkitARM
-#DEVKITPRO = /c/linx-old/devkitPro
+#DEVKITARM = $(DEVKITPRO)/devkitARM
 ifeq ($(strip $(DEVKITPRO)),)
 $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
+endif
+
+ifeq (,$(wildcard devkitPro/libnx/switch_rules))
+
+
+else
+DEVKITPRO = $(TOPDIR)/devkitPro
 endif
 
 TOPDIR ?= $(CURDIR)
@@ -60,7 +66,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-exceptions -Wno-missing-field-initializers -std=gnu++
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=${DEVKITPRO}/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lfreetype -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lz -lnx
+LIBS	:= -lfreetype -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lmbedtls -lmbedx509 -lmbedcrypto -lz -lnx
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

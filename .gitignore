@@ -7,3 +7,6 @@ ReiNXSettings.*
 *.nacp
 *.nsp
 *.npdm
+*.rar
+*.zip
+devkitpro/*
