@@ -2,19 +2,27 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 #DEVKITARM = $(DEVKITPRO)/devkitARM
+#ifeq ($(strip $(DEVKITPRO)),)
+#$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
+#endif
+
+#ifeq (,$(wildcard devkitPro/libnx/switch_rules))
+
+
+#else
+#DEVKITPRO = $(TOPDIR)/devkitPro
+#endif
+
+#TOPDIR ?= $(CURDIR)
+#include $(DEVKITPRO)/libnx/switch_rules
+
 ifeq ($(strip $(DEVKITPRO)),)
 $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/devkitpro")
 endif
 
-ifeq (,$(wildcard devkitPro/libnx/switch_rules))
-
-
-else
-DEVKITPRO = $(TOPDIR)/devkitPro
-endif
-
 TOPDIR ?= $(CURDIR)
 include $(DEVKITPRO)/libnx/switch_rules
+
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
@@ -66,7 +74,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-exceptions -Wno-missing-field-initializers -std=gnu++
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=${DEVKITPRO}/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lfreetype -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lmbedtls -lmbedx509 -lmbedcrypto -lz -lnx
+LIBS	:= -lfreetype -lSDL2_mixer -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lcurl -lmbedtls -lmbedx509 -lmbedcrypto -lz -lnx -lopusfile -lopus -lwebp
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
