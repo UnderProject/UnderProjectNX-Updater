@@ -218,7 +218,7 @@ void UI::optdeltarun() {
 	string url_down;
 	url_down = "http://underproject.000webhostapp.com/DeltaProjectNX/DPNXALPHA.zip";
     
-	CreateProgressBar(&prog, "Get UnderProjectNX...");
+	CreateProgressBar(&prog, "Get DeltaProjectNX...");
     bool rester = net.Downloader1(url_down,filename );
     IncrementProgressBar(&prog);
     if(!rester){
@@ -349,7 +349,7 @@ UI::UI(string Title, string Version) {
    
     //Main pages
     mainMenu.push_back(MenuOption("UnderProjectNX", "Selecciona tu CFW.", nullptr));
-	mainMenu.push_back(MenuOption("DeltaProjectNX (Alpha)", "Selecciona tu CFW.", nullptr));
+	mainMenu.push_back(MenuOption("DeltaProjectNX (Beta)", "Selecciona tu CFW.", nullptr));
     mainMenu.push_back(MenuOption("Update ME", "", bind(&UI::optUpdateHB, this)));
     mainMenu.push_back(MenuOption("About", "About UnderProjectNX Updater.",  bind(&UI::optAbout, this)));
 
