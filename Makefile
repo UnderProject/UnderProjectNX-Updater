@@ -47,7 +47,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 
 APP_TITLE := UnderProject Updater
 APP_AUTHOR := UnderProject Team
-APP_VERSION := 1.3
+APP_VERSION := 1.4
 
 ICON := Icon.jpg
 TARGET		:=	UnderProject-Updater
