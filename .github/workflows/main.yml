@@ -1,4 +1,4 @@
-name: Build NRO
+name: CI
 
 on: [push]
 jobs:
