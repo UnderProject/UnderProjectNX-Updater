@@ -20,7 +20,6 @@ jobs:
         export DEVKITPRO=/opt/devkitpro
         export DEVKITARM=${DEVKITPRO}/devkitARM
         export DEVKITPPC=${DEVKITPRO}/devkitPPC
-        clear
         dkp-pacman -Sl
         source /etc/profile.d/devkit-env.sh
         
