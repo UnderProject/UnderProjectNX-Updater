@@ -20,6 +20,8 @@ jobs:
         export DEVKITPRO=/opt/devkitpro
         export DEVKITARM=${DEVKITPRO}/devkitARM
         export DEVKITPPC=${DEVKITPRO}/devkitPPC
+        cls
+        dkp-pacman -Sl
         source /etc/profile.d/devkit-env.sh
         
     - name: Make app
