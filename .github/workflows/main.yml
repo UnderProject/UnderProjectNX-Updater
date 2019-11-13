@@ -20,3 +20,9 @@ jobs:
         export DEVKITPRO=/opt/devkitpro
         export DEVKITARM=${DEVKITPRO}/devkitARM
         export DEVKITPPC=${DEVKITPRO}/devkitPPC
+        source /etc/profile.d/devkit-env.sh
+        
+    - name: Make app
+      run: |
+        make
+        
