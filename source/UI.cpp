@@ -169,9 +169,9 @@ void UI::optGetPatch() {
     if(!res){
         appletBeginBlockingHomeButton(0);
         unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
-		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/contents/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/contents/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/titles/"); IncrementProgressBar(&prog);}
         Utils::zip_close(zip); IncrementProgressBar(&prog);
         remove(filename.c_str());
         appletEndBlockingHomeButton();
@@ -224,9 +224,9 @@ void UI::optdeltarun() {
     if(!rester){
         appletBeginBlockingHomeButton(0);
         unzFile zip = Utils::zip_open(filename.c_str()); IncrementProgressBar(&prog);
-		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/"); IncrementProgressBar(&prog);}
-		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "atmosphere"){Utils::zip_extract_all(zip, "/atmosphere/contents/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "ReiNX"){Utils::zip_extract_all(zip, "/ReiNX/contents/"); IncrementProgressBar(&prog);}
+		if(cfwpath == "sxos"){Utils::zip_extract_all(zip, "/sxos/titles/"); IncrementProgressBar(&prog);}
         Utils::zip_close(zip); IncrementProgressBar(&prog);
         remove(filename.c_str());
         appletEndBlockingHomeButton();
